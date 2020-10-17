@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-import { getMetricMetaInfo } from '../utils/helpers';
+import { getMetricMetaInfo, timeToString } from '../utils/helpers';
 import UdaciSlider from './UdaciSlider';
 import UdaciSteppers from './UdaciSteppers';
 import DateHeader from './DateHeader';
+import TextButton from './TextButton';
+
+function SubmitBtn({ onPress }) {
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <Text>Submit</Text>
+    </TouchableOpacity>
+  );
+}
 
 export default class AddEntry extends Component {
   state = {
@@ -30,7 +40,7 @@ export default class AddEntry extends Component {
 
   decrement = (metric) => {
     this.setState((state) => {
-      const count = state[metric] - getMetricInfo(metric).step;
+      const count = state[metric] - getMetricMetaInfo(metric).step;
 
       return {
         ...state,
@@ -45,8 +55,35 @@ export default class AddEntry extends Component {
     }));
   };
 
+  submit = () => {
+    const key = timeToString();
+    const entry = this.state;
+
+    this.setState(() => ({
+      run: 0,
+      bike: 0,
+      swim: 0,
+      eat: 0,
+      sleep: 0,
+    }));
+  };
+
+  reset = () => {
+    const key = timeToString();
+  };
+
   render() {
     const metaInfo = getMetricMetaInfo();
+
+    if (true) {
+      return (
+        <View>
+          <Ionicons name='ios-happy' size={100} />
+          <Text>You already logged your information for today.</Text>
+          <TextButton onPress={this.reset}>Reset</TextButton>
+        </View>
+      );
+    }
 
     return (
       <View>
@@ -75,6 +112,7 @@ export default class AddEntry extends Component {
             </View>
           );
         })}
+        <SubmitBtn onPress={this.submit} />
       </View>
     );
   }
