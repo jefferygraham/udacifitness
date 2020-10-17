@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { submitEntry, removeEntry } from '../utils/api';
 import { getMetricMetaInfo, timeToString } from '../utils/helpers';
 import UdaciSlider from './UdaciSlider';
 import UdaciSteppers from './UdaciSteppers';
@@ -66,10 +67,14 @@ export default class AddEntry extends Component {
       eat: 0,
       sleep: 0,
     }));
+
+    submitEntry({ key, entry });
   };
 
   reset = () => {
     const key = timeToString();
+
+    removeEntry(key);
   };
 
   render() {
